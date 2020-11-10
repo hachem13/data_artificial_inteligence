@@ -67,7 +67,7 @@ join netflix.netflix_shows as ns ON ns.title = nt.tittle GROUP BY title ORDER BY
 
 #  Calcule de la durée totale de tous les films (Movie)S de votre table netflix_titles 
 
-SELECT SUM(duration) AS durée_totale_de_film FROM netflix.netflix_title;
+SELECT SUM(duration) AS durée_totale_de_film FROM netflix.netflix_title WHERE type = "Movie";
 
 # Comptage du nombre de TV Shows de votre table ‘netflix_shows’ dont le ‘ratingLevel’ est renseigné
 
