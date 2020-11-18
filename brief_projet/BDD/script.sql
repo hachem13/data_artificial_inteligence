@@ -54,34 +54,39 @@ IGNORE 1 ROWS;
 # Affichage de  tous les titres de films de la table netflix_titles dont 
 # l’ID est inférieur strict à 80000000 
 
-SELECT title FROM netflix.netflix_title where show_id < 80000000 ;
+SELECT title FROM netflix_title where (show_id < 80000000 and type="Movie") ;
 
 # Affichage de toutes les durée des TV Show (colonne duration)
 
-SELECT duration, netflix_title.type FROM netflix.netflix_title WHERE netflix_title.type = "Tv Show";
+SELECT duration FROM netflix.netflix_title WHERE netflix_title.type = "Tv Show";
 
 # Affichage de tous les noms de films communs aux 2 tables (netflix_titles et netflix_shows) 
 
-SELECT title FROM netflix.netflix_title AS nt
-join netflix.netflix_shows as ns ON ns.title = nt.tittle GROUP BY title ORDER BY title;
-
+SELECT netflix_shows.title 
+FROM netflix_shows INNER JOIN netflix_title ON netflix_shows.title = netflix_title.title 
+GROUP BY netflix_shows.title;
 #  Calcule de la durée totale de tous les films (Movie)S de votre table netflix_titles 
 
 SELECT SUM(duration) AS durée_totale_de_film FROM netflix.netflix_title WHERE type = "Movie";
 
+SELECT SUM(SUBSTR(duration, 1, 3))   AS durée_totale_de_film FROM netflix_title WHERE type = "Movie";
+
 # Comptage du nombre de TV Shows de votre table ‘netflix_shows’ dont le ‘ratingLevel’ est renseigné
 
-SELECT COUNT(ratingLevel) FROM netflix.netflix_shows WHERE ratingLevel <> '';
+SELECT count(distinct s.title)
+from netflix_shows as s
+INNER JOIN netflix_title as t
+ON s.title = t.title
+WHERE ratingLevel<>''AND type='TV Show';
 
 # Compter les films et TV Shows pour lesquels les noms (title) sont les mêmes sur les 
 # 2 tables et dont le ‘release year’ est supérieur à 2016. 
 
-SELECT count(netflix_title.title) AS nombre_de_titre, netflix_shows.title
+SELECT count(netflix_title.title) AS nombre_de_titre
 from netflix_title
 INNER JOIN netflix_shows ON netflix_title.title = netflix_shows.title
 WHERE netflix_shows.title = netflix_title.title 
-and(netflix_title.release_year > 2016 and netflix_shows.release_year > 2016) 
-GROUP BY netflix_shows.title;
+and netflix_title.release_year > 2016 and netflix_shows.release_year > 2016 ;
 
 # Suppression de la colonne ‘rating’ de la table ‘netflix_shows’ 
 

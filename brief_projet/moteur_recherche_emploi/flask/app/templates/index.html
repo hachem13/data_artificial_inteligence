@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <meta charset="utf-8" />
+       <link rel="stylesheet" href="static/style.css" />
+       <title>RECHERCHE D'EMPLOI</title>
+   </head> 
+   <body>
+       <h2>RECHERCHE D'EMPLOI</h2>
+       <div class = 'search'>
+        <form action="/" method="post" >
+        <p>
+            <label>Rechercher un emploi : <input type="text" name="job" size="30"/></label>
+            <input type = "submit" value="Envoyer" />
+        </p>
+        </form>
+        <br/>
+        <table style="width: 100%;">
+            <tr class = 'entete'>
+                <th>titre</th>
+                <th>description</th>
+                <th>link</th>
+                <th>guid</th>
+                <th>pubDate</th>
+            </tr>
+            {% for j in job %}
+            <tr>
+                <td>{{ j.title }}</td>
+                <td>{{ j.description }}</td>
+                <td>{{ j.link }}</td>
+                <td>{{ j.guid }}</td>
+                <td>{{ j.pubDate }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+       </div> 
+   </body>
+</html>
