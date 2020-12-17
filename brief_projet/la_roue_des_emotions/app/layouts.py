@@ -15,11 +15,14 @@ from sklearn.metrics import classification_report
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.svm import LinearSVC
 from  sklearn.metrics import precision_score, recall_score, confusion_matrix, f1_score
-import seaborn as sns
 from time import time
 from collections import defaultdict
-from pipline import print_table
-from joblib import load
+import pickle
+
+import dash
+import dash_bootstrap_components as dbc
+
+
 
 
 
@@ -39,7 +42,6 @@ grouped1 = grouped1.sort_values(by=[('tweet_id','count')] , ascending = False)
 # Process df1
 corpus = df.Text
 targets = df.Emotion
-
 
 
 vectorizer = CountVectorizer()
@@ -83,7 +85,7 @@ colors = {
     'text': '#111111'
 }
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"]
 
 
 
@@ -91,31 +93,34 @@ html.Br(),
 
 def Header():
     return html.Div([
-        get_header(),
         html.Br([]),
-        get_menu()
+        get_menu(),
+        html.Br([]),
+        html.Br([]),
+
     ])
 
-def get_header():
-    header = html.Div([
-
-        html.Div([
-            html.H1(
-                'Roue des Emotions')
-        ], className="twelve columns padded")
-
-    ], className="row")
-    return header
 
 def get_menu():
-    menu = html.Div([
+    navbar = dbc.NavbarSimple(
+        children=[
+            html.Div([html.Img(src='/assets/emotions.png', height = "100px")]),
+            dbc.NavItem(dbc.NavLink("Page 1", href="/apps/page1")),
+            dbc.DropdownMenu(
+                children=[
+                    dbc.DropdownMenuItem("More pages", header=True),
+                    dbc.DropdownMenuItem("Page 2", href="/apps/page2"),
+                ],
+                nav=True,
+                in_navbar=True,
+                label="More",
+            ),
+        ],
+        brand="La Roue des Emotions",className="H1", 
+        color="primary",
+        dark=True,)
+    return navbar
 
-        dcc.Link('page 1        |', href='/apps/page1', className="tab first"),
-
-        dcc.Link('page 2        |', href='/apps/page2', className="tab")
-
-    ], className="row")
-    return menu
 
 # plot
 
@@ -123,7 +128,7 @@ fig = go.Figure(data=[
     go.Bar(name='frequence des emotions',
             x=grouped.index, 
             y= grouped[('Text', 'count')], 
-            marker = dict(color = 'rgba(153, 181, 71, 0.5)',
+            marker = dict(color = '#a1b5cc',
             line = dict(color ='rgb(0,0,0)',width =2.5)),
             text = grouped[('Text', 'count')])
     ])
@@ -135,7 +140,7 @@ fig1 = go.Figure(data=[
     go.Bar(name='frequence des emotions',
             x=grouped.index, 
             y= grouped1[('tweet_id', 'count')], 
-            marker = dict(color = 'rgba(174, 204, 161, 0.5)',
+            marker = dict(color = '#a1b5cc',
             line = dict(color ='rgb(0,0,0)',width =2.5)),
             text = grouped1[('tweet_id', 'count')])
     ])
@@ -147,7 +152,7 @@ fig2 = go.Figure(data=[
     go.Bar(name= 'frequence des mots',
     x = r,
     y = freq, 
-    marker = dict(color = 'rgba(153, 181, 71, 0.5)',
+    marker = dict(color = '#b2cca1',
             line = dict(color ='rgb(0,0,0)',width =2.5)),
             text = subsample(labels))
 ])
@@ -164,7 +169,7 @@ fig3 = go.Figure(data=[
     go.Bar(name= 'frequence des mots',
     x = r1,
     y = freq1, 
-    marker = dict(color = 'rgba(153, 181, 71, 0.5)',
+    marker = dict(color = '#b2cca1',
             line = dict(color ='rgb(0,0,0)',width =2.5)),
             text = subsample(labels1))
 ])
@@ -194,7 +199,7 @@ layout1 =  html.Div([
             style_table={'overflowX': 'scroll',
                          'overflowY': 'scroll',
                          'maxHeight': '300px',
-                         'maxWidth': '1500px'},
+                         'maxWidth': '1600px'},
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'},
             style_cell_conditional=[
                 {
@@ -233,7 +238,7 @@ layout1 =  html.Div([
             style_table={'overflowX': 'scroll',
                          'overflowY': 'scroll',
                          'maxHeight': '300px',
-                         'maxWidth': '1500px'},
+                         'maxWidth': '1600px'},
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'},
             style_cell_conditional=[
                 {
@@ -269,23 +274,121 @@ layout1 =  html.Div([
     dcc.Link('Go to page2', href='/apps/page2')
 ])
 
-printTable = print_table(load('filename.joblib'))
+def print_table(res):
+    # Compute mean 
+    final = {}
+    for model in res:
+        arr = np.array(res[model])
+        final[model] = {
+            "name" : model, 
+            "time" : arr[:, 0].mean().round(2),
+            "f1_score": arr[:,1].mean().round(3),
+            "Precision" : arr[:,2].mean().round(3),
+            "Recall" : arr[:,3].mean().round(3)
+        }
+    df3 = pd.DataFrame.from_dict(final, orient="index").round(3)
+    return df3
+
+filename = 'filename.pkl'
+with open(filename, 'rb') as f:
+    printTable = print_table(pickle.load(f))
+
+def print_table1(res1):
+    # Compute mean 
+    final = {}
+    for model in res1:
+        arr = np.array(res1[model])
+        final[model] = {
+            "name" : model, 
+            "time" : arr[:, 0].mean().round(2),
+            "f1_score": arr[:,1].mean().round(3),
+            "Precision" : arr[:,2].mean().round(3),
+            "Recall" : arr[:,3].mean().round(3)
+        }
+    df4 = pd.DataFrame.from_dict(final, orient="index").round(3)
+    return df4
+
+filename1 = 'filename1.pkl'
+with open(filename1, 'rb') as f1:
+    printTable1 = print_table1(pickle.load(f1))
+
+# plot f1_score recall and precision from data kaggle
+
+fig4 = go.Figure()
+fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.time, name="time",
+                    line_shape='linear'))
+fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.f1_score, name="f1_score",
+                    line_shape='linear'))
+fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.Precision, name="Precision",
+                    line_shape='linear'))
+fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.Recall, name="Recall",
+                    line_shape='linear'))
+
+fig4.update_traces(hoverinfo='text+name', mode='lines+markers')
+fig4.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
+
+fig5 = go.Figure()
+fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.time, name="time",
+                    line_shape='linear'))
+fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.f1_score, name="f1_score",
+                    line_shape='linear'))
+fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Precision, name="Precision",
+                    line_shape='linear'))
+fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Recall, name="Recall",
+                    line_shape='linear'))
+
+fig5.update_traces(hoverinfo='text+name', mode='lines+markers')
+fig5.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
+
 
 
 layout2 = html.Div([
     Header(),
-    html.Div([
+    html.Br(),
+    html.Br(), 
+    dcc.Tabs([
     dcc.Tab(label='Kaggle Data', children=[
         dash_table.DataTable(
             id = 'Kaggle1',
             columns=[{"name": i, "id": i} for i in printTable.columns],
             data=printTable.to_dict('records'),
             editable=False,
-            )
-        ]),    
+            style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
+            ),
+        html.Br(),
+        dcc.Markdown('''On remarque qu'on as des scores très élever qui se rapproche des 90% 
+                        qui veut dire qu'on as des bonnes prédictions'''),
+        html.Br(),
+        dcc.Graph(
+            id = 'plot4',
+            figure=fig4
+        ),
+        dcc.Markdown(''' Matrice de confusion'''),
+        html.Div(children = [html.Img(id='image',src=app.get_asset_url('confusion-matrix.png'), style = { 'width': '450px', 'height':'400px'},)])
+        ]),
+    dcc.Tab(label='Data Word', children=[
+        dash_table.DataTable(
+            id = 'data W',
+            columns=[{"name": i, "id": i} for i in printTable1.columns],
+            data=printTable1.to_dict('records'),
+            editable=False,
+            style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
+            ),
+        html.Br(),
+        dcc.Markdown(''' On remarque qu'on as des scores très faible due au nuance des emortions
+                        dans les messages
+                        '''),
+        html.Br(),
+        dcc.Graph(
+            figure= fig5
+        ), 
+        dcc.Markdown(''' Matrice de confusion'''),
+        html.Div(children = [html.Img(id='image',src=app.get_asset_url('confusion-matrix1.png'), style = { 'width': '450px', 'height':'400px'},)])
+        ]),   
     ]), 
     html.Br(),
     html.Br(),
     html.Div(id='id2'),
     dcc.Link('Go to page1', href='/apps/page1')
 ])            
+
