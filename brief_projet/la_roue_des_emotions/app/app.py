@@ -6,9 +6,13 @@ import dash_bootstrap_components as dbc
 
 external_stylesheets = [dbc.themes.LUX]
 
-app = dash.Dash(external_stylesheets=external_stylesheets)
-server = app.server
+#app = dash.Dash(external_stylesheets=external_stylesheets)
+# app = dash.Dash(__name__, suppress_callback_exceptions=True)
+#server = app.server
+
+
+app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=external_stylesheets)
 app.config.suppress_callback_exceptions = True
 
-# app = dash.Dash(__name__, suppress_callback_exceptions=True)
-# server = app.server
+
+server = app.server 
