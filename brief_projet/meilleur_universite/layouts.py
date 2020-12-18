@@ -13,7 +13,7 @@ from sklearn import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn import decomposition, preprocessing
 import numpy as np
-#from functions import *
+
 
 
 colors = {
