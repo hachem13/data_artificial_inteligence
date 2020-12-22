@@ -18,9 +18,9 @@ from  sklearn.metrics import precision_score, recall_score, confusion_matrix, f1
 from time import time
 from collections import defaultdict
 import pickle
-import base64
 
-import dash_bootstrap_components as dbc
+
+
 
 
 
@@ -121,33 +121,44 @@ html.Br(),
 def Header():
     return html.Div([
         html.Br([]),
-        get_menu(),
+#        get_menu(),
         html.Br([]),
         html.Br([]),
 
     ])
  
 
-def get_menu():
-    navbar = dbc.NavbarSimple(
-        children=[
-            html.Div([html.Img(src='assets/emotions.png', height = "100px")]),
-            dbc.NavItem(dbc.NavLink("Home", href="/apps/page1")),
-            dbc.DropdownMenu(
-                children=[
-                    dbc.DropdownMenuItem("More pages", header=True),
-                    dbc.DropdownMenuItem("Résultat Logs", href="/apps/page2"),
-                ],
-                nav=True,
-                in_navbar=True,
-                label="More",
-            ),
-        ],
-        brand="La Roue des Emotions",className="H1", 
-        color="primary",
-        dark=True,)
-    return navbar
+# def get_menu():
+#     navbar = dbc.NavbarSimple(
+#         children=[
+#             html.Div([html.Img(src='assets/emotions.png', height = "100px")]),
+#             dbc.NavItem(dbc.NavLink("Home", href="/apps/page1")),
+#             dbc.DropdownMenu(
+#                 children=[
+#                     dbc.DropdownMenuItem("More pages", header=True),
+#                     dbc.DropdownMenuItem("Résultat Logs", href="/apps/page2"),
+#                 ],
+#                 nav=True,
+#                 in_navbar=True,
+#                 label="More",
+#             ),
+#         ],
+#         brand="La Roue des Emotions",className="H1", 
+#         color="primary",
+#         dark=True,)
+#     return navbar
 
+#def get_menu():
+    # dropdown = dbc.DropdownMenu(
+    # children=[
+    #     dbc.DropdownMenuItem("Home", href="/apps/page1"),
+    #     dbc.DropdownMenuItem("Resultat logs", href="/apps/page2"),
+
+    # ],
+    # nav = True,
+    # in_navbar = True,
+    # label = "Explore",
+    # )
 
 # plot
 
