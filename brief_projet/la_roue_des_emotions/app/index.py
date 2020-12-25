@@ -4,7 +4,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from app import server
 from app import app
-from layouts import layout1, layout2
+from layouts import layout1, layout2, layout3
 import callbacks
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -16,7 +16,8 @@ import dash
 dropdown = dbc.DropdownMenu(
     children=[
         dbc.DropdownMenuItem("Home", href="/apps/page1"),
-        dbc.DropdownMenuItem("Resultat logs", href="/apps/page2"),
+        dbc.DropdownMenuItem("Data Vise", href="/apps/page2"),
+        dbc.DropdownMenuItem("Resultat logs", href="/apps/page3")
 
     ],
     nav = True,
@@ -83,6 +84,8 @@ def display_page(pathname):
         return layout1
     elif pathname == '/apps/page2':
         return layout2
+    elif pathname == '/apps/page3':
+        return layout3
     else:
         return '404'
 
