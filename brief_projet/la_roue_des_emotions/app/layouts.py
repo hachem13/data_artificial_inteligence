@@ -19,13 +19,6 @@ from time import time
 from collections import defaultdict
 import pickle
 
-
-
-
-
-
-
-
 df = pd.read_csv('data/Emotion_final.csv')
 df1 = pd.read_csv('data/text_emotion.csv')
 # concate data set 
@@ -110,55 +103,61 @@ colors = {
     'text': '#111111'
 }
 
-external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"]
 
-# confusion_matrix1 = "assets/confusion-matrix.png" # replace with your own image
-# encoded_image1 = base64.b64encode(open(confusion_matrix1, 'rb').read())
-# html.Img(src='data:image/png;base64,{}'.format(encoded_image1))
 
 html.Br(),
 
 def Header():
     return html.Div([
         html.Br([]),
-#        get_menu(),
         html.Br([]),
         html.Br([]),
 
-    ])
+    ]) 
  
+layout1 = html.Div([html.Div(style = {'padding-left': '40vw'},children = [html.Img(id='image',src=app.get_asset_url('emotions2.png'))]),
+        html.Br(),
+        html.Br(),
+        html.Div(style = {'text-size': '30px'}, children = [dcc.Markdown('''Construit d’après les travaux du psychologue américain Robert Plutchik, la roue des émotions est un modèle des émotions humaines et peut facilement servir à définir des personnages, ainsi que leur évolution dans une trame narrative.
 
-# def get_menu():
-#     navbar = dbc.NavbarSimple(
-#         children=[
-#             html.Div([html.Img(src='assets/emotions.png', height = "100px")]),
-#             dbc.NavItem(dbc.NavLink("Home", href="/apps/page1")),
-#             dbc.DropdownMenu(
-#                 children=[
-#                     dbc.DropdownMenuItem("More pages", header=True),
-#                     dbc.DropdownMenuItem("Résultat Logs", href="/apps/page2"),
-#                 ],
-#                 nav=True,
-#                 in_navbar=True,
-#                 label="More",
-#             ),
-#         ],
-#         brand="La Roue des Emotions",className="H1", 
-#         color="primary",
-#         dark=True,)
-#     return navbar
+Depuis quelques années, les dispositifs de communication médiatisée par ordinateur (CMO) sont massivement utilisés, aussi bien dans les activités professionnelles que personnelles. Ces dispositifs permettent à des participants distants physiquement de communiquer. La plupart implique une communication écrite médiatisée par ordinateur (CEMO) : forums de discussion, courrier électronique, messagerie instantanée. Les participants ne s’entendent pas et ne se voient pas mais peuvent communiquer par l’envoi de messages écrits, qui combinent, généralement, certaines caractéristiques des registres écrit et oral (Marcoccia, 2000a ; Marcoccia, Gauducheau, 2007 ; Riva, 2001).
 
-#def get_menu():
-    # dropdown = dbc.DropdownMenu(
-    # children=[
-    #     dbc.DropdownMenuItem("Home", href="/apps/page1"),
-    #     dbc.DropdownMenuItem("Resultat logs", href="/apps/page2"),
+Imaginez que vous souhaitez savoir ce qui se passe derrière votre écran ordinateur, qui sont vos contacts les plus actifs et quelle est leur personnalité (pas banal comme question !!). Vous allez alors vous lancer dans l’analyse de leur narration et tenter d’extraire quelle émotion se dégage de chacune des phrases.
 
-    # ],
-    # nav = True,
-    # in_navbar = True,
-    # label = "Explore",
-    # )
+Chez Simplon nous utilisons tous les jours des outils de discussion textuels et nous construisons nos relations sociales et professionnelles autour de ces dispositifs. Pour entretenir des rapports sociaux stables, sereins, de confiance et efficaces, au travers des outils de communication écrites, lorsqu'il n'est pas possible d'avoir la visio (avec caméra), il est nécessaire de détecter des éléments "clés" dans les channels de discussions / mails qui nous permettront de déceler de la colère, de la frustration, de la tristesse ou encore de la joie de la part d'un collègue ou d'un amis pour adapter nos relations sociales.
+En tant qu'expert en data science, nous allons vous demander de développer un modèle de machine learning permettant de classer les phrases suivant l'émotion principale qui en ressort.
+
+Pour des questions d’ordre privé, nous ne vous demanderons pas de nous communiquer les conversations provenant de votre réseau social favori ou de vos emails mais nous allons plutôt vous proposer deux jeux de données contenant des phrases, ces fichiers ayant déjà été annoté.
+
+Vous devrez proposer plusieurs modèles de classification des émotions et proposer une analyse qualitative et quantitative de ces modèles en fonction de critères d'évaluation. Vous pourrez notamment vous appuyer sur les outils de reporting des librairies déjà étudiées. Vous devrez investiguer aux travers de librairies d'apprentissage automatique standards et de traitement automatique du langage naturel comment obtenir les meilleurs performance de prédiction possible en prenant en compte l'aspect multi-class du problème et en explorant l'impact sur la prédiction de divers prétraitement tel que la suppression des **stop-words**, la **lemmatisation** et l'utilisation de **n-grams**, et différente approche pour la vectorisation.
+
+Vous devrez travailler dans **un premier temps** avec le jeu de données issue de [**Kaggle**](https://www.kaggle.com/ishantjuyal/emotions-in-text) pour réaliser vos apprentissage et l'évaluation de vos modèles.
+
+Dans l'objectif d'enrichir notre prédictions nous souhaitons augmenter notre jeux de donneés.
+Vous devrez donc travailler dans un **deuxième temps** avec le jeux de données fournie, issue de [**data.world**](https://data.world/crowdflower/sentiment-analysis-in-text) afin de  :
+1. comparer d'une part si les résultats de classification sur votre premier jeux de données sont similaire avec le second. Commentez.
+2. Combiner les deux jeux données pour tenter d'améliorer vos résultats de prédiction.
+3. Prédire les nouvelles émotions présente dans ce jeux de données sur les message du premier, et observer si les résultats sont pertinent.
+
+
+Vous devrez ensuite présenter vos résultats sous la forme d'un dashboard muli-pages Dash.
+La première page du Dashboard sera dédiée à l'analyse et au traitement des données. Vous pourrez par exemple présenter les données "brut" sous la forme d'un tableau puis les données pré-traitées dans le même tableau avec un bouton ou menu déroulant permettant de passer d'un type de données à un autre (n'afficher qu'un échantillon des résultats, on dans une fenetre "scrollable"). Sur cette première page de dashboard seront accessibles vos graphiques ayant trait à votre première analyse de données (histogramme, bubble chart, scatterplot etc), notamment
+* l'histogramme représentant la fréquence d’apparition des mots (commentez)
+* l'histogramme des émotions (commentez)
+
+Une deuxième page du Dashboard sera dédiée aux résultats issues des classifications . Il vous est demandé de comparer les résultats d'au moins 5 classifiers qu présenterai dans un tableau permettant de visualiser vos mesures. Sur cette page de dashboard pourra se trouver par exemple, des courbes de rappel de précision (permette de tracer la précision et le rappel pour différents seuils de probabilité), un rapport de classification (un rapport de classification visuel qui affiche la precision, le recall, le f1-score, support, ou encore une matrice de confusion ou encore une graphique permettant de visualiser les mots les plus représentatif associé à chaque émotions.
+
+ Héberger le dashboard sur le cloud de visualisation de données Héroku (https://www.heroku.com/)
+
+
+**BONUS**
+
+Créer une application client/serveur permettant à un utilisateur d'envoyer du texte via un champs de recherche (ou un fichier sur le disque du client) et de lui renvoyer
+1. l'émotion du texte envoyé.
+2. (bonus du bonus) la roue des émotions du document (exemple: quelle proportion de chacune des émotions contient le document ?)
+'''
+)])])
+
 
 # plot
 
@@ -248,7 +247,7 @@ fig7.update_xaxes(
         tickvals = r2,
         ticktext = labels2)
 
-layout1 =  html.Div([
+layout2=  html.Div([
     Header(),
     html.Br(),
     html.Br(),
@@ -379,7 +378,7 @@ layout1 =  html.Div([
     ]),
     html.Br(),
     html.Br(),
-    html.Div(id='id1'),
+    html.Div(id='id2'),
     dcc.Link('Go to page2', href='/apps/page2')
 ])
 
@@ -402,6 +401,10 @@ filename = 'filename.pkl'
 with open(filename, 'rb') as f:
     printTable = print_table(pickle.load(f))
 
+filename1 = 'filename1.pkl'
+with open(filename1, 'rb') as f1:
+    printTable1 = print_table(pickle.load(f1))
+
 def print_table1(res1):
     # Compute mean 
     final = {}
@@ -417,9 +420,14 @@ def print_table1(res1):
     df4 = pd.DataFrame.from_dict(final, orient="index").round(3)
     return df4
 
-filename1 = 'filename1.pkl'
-with open(filename1, 'rb') as f1:
-    printTable1 = print_table1(pickle.load(f1))
+filename2 = 'filename2.pkl'
+with open(filename2, 'rb') as f2:
+    printTable2 = print_table1(pickle.load(f2))
+
+filename3 = 'filename3.pkl'
+with open(filename3, 'rb') as f3:
+    printTable3 = print_table1(pickle.load(f3))
+
 
 def print_table2(res2):
     # Compute mean 
@@ -436,16 +444,18 @@ def print_table2(res2):
     df4 = pd.DataFrame.from_dict(final, orient="index").round(3)
     return df4
 
-filename2 = 'filename2.pkl'
-with open(filename2, 'rb') as f2:
-    printTable2 = print_table2(pickle.load(f2))
+filename4 = 'filename4.pkl'
+with open(filename4, 'rb') as f4:
+    printTable4 = print_table2(pickle.load(f4))
 
+filename5 = 'filename4.pkl'
+with open(filename5, 'rb') as f5:
+    printTable5 = print_table2(pickle.load(f5))
 
 # plot f1_score recall and precision from data kaggle
 
 fig4 = go.Figure()
-fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.time, name="time",
-                    line_shape='linear'))
+
 fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.f1_score, name="f1_score",
                     line_shape='linear'))
 fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.Precision, name="Precision",
@@ -456,42 +466,86 @@ fig4.add_trace(go.Scatter(x=printTable.name, y=printTable.Recall, name="Recall",
 fig4.update_traces(hoverinfo='text+name', mode='lines+markers')
 fig4.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
 
+fig9 = go.Figure()
+
+fig9.add_trace(go.Scatter(x=printTable1.name, y=printTable1.f1_score, name="f1_score",
+                    line_shape='linear'))
+fig9.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Precision, name="Precision",
+                    line_shape='linear'))
+fig9.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Recall, name="Recall",
+                    line_shape='linear'))
+
+fig9.update_traces(hoverinfo='text+name', mode='lines+markers')
+fig9.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall avec tfid')
+
 fig5 = go.Figure()
-fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.time, name="time",
+fig5.add_trace(go.Scatter(x=printTable2.name, y=printTable2.f1_score, name="f1_score",
                     line_shape='linear'))
-fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.f1_score, name="f1_score",
+fig5.add_trace(go.Scatter(x=printTable2.name, y=printTable2.Precision, name="Precision",
                     line_shape='linear'))
-fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Precision, name="Precision",
-                    line_shape='linear'))
-fig5.add_trace(go.Scatter(x=printTable1.name, y=printTable1.Recall, name="Recall",
+fig5.add_trace(go.Scatter(x=printTable2.name, y=printTable2.Recall, name="Recall",
                     line_shape='linear'))
 
 fig5.update_traces(hoverinfo='text+name', mode='lines+markers')
 fig5.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
 
+fig10 = go.Figure()
+fig10.add_trace(go.Scatter(x=printTable3.name, y=printTable3.f1_score, name="f1_score",
+                    line_shape='linear'))
+fig10.add_trace(go.Scatter(x=printTable3.name, y=printTable3.Precision, name="Precision",
+                    line_shape='linear'))
+fig10.add_trace(go.Scatter(x=printTable3.name, y=printTable3.Recall, name="Recall",
+                    line_shape='linear'))
+
+fig10.update_traces(hoverinfo='text+name', mode='lines+markers')
+fig10.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall avec tfid' )
+
 fig8 = go.Figure()
-fig8.add_trace(go.Scatter(x=printTable2.name, y=printTable2.time, name="time",
+fig8.add_trace(go.Scatter(x=printTable4.name, y=printTable4.f1_score, name="f1_score",
                     line_shape='linear'))
-fig8.add_trace(go.Scatter(x=printTable2.name, y=printTable2.f1_score, name="f1_score",
+fig8.add_trace(go.Scatter(x=printTable4.name, y=printTable4.Precision, name="Precision",
                     line_shape='linear'))
-fig8.add_trace(go.Scatter(x=printTable2.name, y=printTable2.Precision, name="Precision",
-                    line_shape='linear'))
-fig8.add_trace(go.Scatter(x=printTable2.name, y=printTable2.Recall, name="Recall",
+fig8.add_trace(go.Scatter(x=printTable4.name, y=printTable4.Recall, name="Recall",
                     line_shape='linear'))
 
 fig8.update_traces(hoverinfo='text+name', mode='lines+markers')
 fig8.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
 
-layout2 = html.Div([
+fig11 = go.Figure()
+fig11.add_trace(go.Scatter(x=printTable5.name, y=printTable5.f1_score, name="f1_score",
+                    line_shape='linear'))
+fig11.add_trace(go.Scatter(x=printTable5.name, y=printTable5.Precision, name="Precision",
+                    line_shape='linear'))
+fig11.add_trace(go.Scatter(x=printTable5.name, y=printTable5.Recall, name="Recall",
+                    line_shape='linear'))
+
+fig11.update_traces(hoverinfo='text+name', mode='lines+markers')
+fig11.update_layout(legend=dict(y=0.5, traceorder='reversed', font_size=16),title='f1_socre, precision, recall')
+f
+
+layout3 = html.Div([
     Header(),
     html.Br(),
     html.Br(), 
     dcc.Tabs([
     dcc.Tab(label='Kaggle Data', children=[
+        html.Br(),
+        html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos sans tfid'''),
         dash_table.DataTable(
             id = 'Kaggle1',
             columns=[{"name": i, "id": i} for i in printTable.columns],
             data=printTable.to_dict('records'),
+            editable=False,
+            style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
+            ),
+        html.Br(),
+        html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos avec tfid'''),
+        dash_table.DataTable(
+            id = 'Kaggle1',
+            columns=[{"name": i, "id": i} for i in printTable1.columns],
+            data=printTable1.to_dict('records'),
             editable=False,
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
             ),
@@ -503,20 +557,35 @@ layout2 = html.Div([
             id = 'plot4',
             figure=fig4
         ),
+        dcc.Graph(
+            id = 'plot9',
+            figure=fig9
+        ),
         dcc.Markdown(''' Matrice de confusion'''),
         html.Div(children = [html.Img(src=app.get_asset_url('confusion-matrix.png'), style = { 'width': '450px', 'height':'400px'})])
         #html.Div(children = [html.Img(src='data:image/png;base64,{}'.format(encoded_image1))])
 
         ]),
     dcc.Tab(label='Data Word', children=[
+        html.Br(),
+        html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos sans tfid'''),
         dash_table.DataTable(
             id = 'data W',
-            columns=[{"name": i, "id": i} for i in printTable1.columns],
-            data=printTable1.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in printTable2.columns],
+            data=printTable2.to_dict('records'),
             editable=False,
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
             ),
         html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos avec tfid'''),
+        dash_table.DataTable(
+            id = 'Kaggle1',
+            columns=[{"name": i, "id": i} for i in printTable3.columns],
+            data=printTable3.to_dict('records'),
+            editable=False,
+            style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
+            ),
         dcc.Markdown(''' On remarque qu'on as des scores très faible due au nuance des emortions
                         dans les messages
                         '''),
@@ -524,15 +593,31 @@ layout2 = html.Div([
         dcc.Graph(
             figure= fig5
         ), 
+        dcc.Graph(
+            figure= fig10
+        ), 
         dcc.Markdown(''' Matrice de confusion'''),
 
         html.Div(children = [html.Img(src=app.get_asset_url('confusion-matrix1.png'), style = { 'width': '450px', 'height':'400px'},)])
     ]),
     dcc.Tab(label='Data merge', children=[
+        html.Br(),
+        html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos sans tfid'''),
         dash_table.DataTable(
             id = 'data m',
-            columns=[{"name": i, "id": i} for i in printTable2.columns],
-            data=printTable2.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in printTable4.columns],
+            data=printTable4.to_dict('records'),
+            editable=False,
+            style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
+            ),
+        html.Br(),
+        html.Br(),
+        dcc.Markdown('''Tableau des résultats des algos avec tfid'''),
+        dash_table.DataTable(
+            id = 'Kaggle1',
+            columns=[{"name": i, "id": i} for i in printTable5.columns],
+            data=printTable5.to_dict('records'),
             editable=False,
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
             ),
@@ -546,6 +631,9 @@ layout2 = html.Div([
         html.Br(),
         dcc.Graph(
             figure= fig8
+        ),
+        dcc.Graph(
+            figure= fig11
         ), 
         dcc.Markdown(''' Matrice de confusion'''),
         html.Div(children = [html.Img(src=app.get_asset_url('confusion-matrix2.png'), style = { 'width': '450px', 'height':'400px'},)])
@@ -553,7 +641,7 @@ layout2 = html.Div([
     ]), 
     html.Br(),
     html.Br(),
-    html.Div(id='id2'),
+    html.Div(id='id3'),
     dcc.Link('Go to page1', href='/apps/page1')
 ])            
 
