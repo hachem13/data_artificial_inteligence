@@ -13,11 +13,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.multiclass import OneVsOneClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import SGDClassifier
 from sklearn.svm import LinearSVC
 from  sklearn.metrics import precision_score, recall_score, confusion_matrix, f1_score
+import dash_bootstrap_components as dbc
 from time import time
 from collections import defaultdict
 import pickle
+import nltk
 
 df = pd.read_csv('data/Emotion_final.csv')
 df1 = pd.read_csv('data/text_emotion.csv')
@@ -103,7 +107,7 @@ colors = {
     'text': '#111111'
 }
 
-
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 html.Br(),
 
@@ -118,7 +122,7 @@ def Header():
 layout1 = html.Div([html.Div(style = {'padding-left': '40vw'},children = [html.Img(id='image',src=app.get_asset_url('emotions2.png'))]),
         html.Br(),
         html.Br(),
-        html.Div(style = {'text-size': '30px'}, children = [dcc.Markdown('''Construit d’après les travaux du psychologue américain Robert Plutchik, la roue des émotions est un modèle des émotions humaines et peut facilement servir à définir des personnages, ainsi que leur évolution dans une trame narrative.
+        html.Div(style = {'text-size': '40px', 'text_aligne': 'center'}, children = [dcc.Markdown('''Construit d’après les travaux du psychologue américain Robert Plutchik, la roue des émotions est un modèle des émotions humaines et peut facilement servir à définir des personnages, ainsi que leur évolution dans une trame narrative.
 
 Depuis quelques années, les dispositifs de communication médiatisée par ordinateur (CMO) sont massivement utilisés, aussi bien dans les activités professionnelles que personnelles. Ces dispositifs permettent à des participants distants physiquement de communiquer. La plupart implique une communication écrite médiatisée par ordinateur (CEMO) : forums de discussion, courrier électronique, messagerie instantanée. Les participants ne s’entendent pas et ne se voient pas mais peuvent communiquer par l’envoi de messages écrits, qui combinent, généralement, certaines caractéristiques des registres écrit et oral (Marcoccia, 2000a ; Marcoccia, Gauducheau, 2007 ; Riva, 2001).
 
@@ -448,7 +452,7 @@ filename4 = 'filename4.pkl'
 with open(filename4, 'rb') as f4:
     printTable4 = print_table2(pickle.load(f4))
 
-filename5 = 'filename4.pkl'
+filename5 = 'filename5.pkl'
 with open(filename5, 'rb') as f5:
     printTable5 = print_table2(pickle.load(f5))
 
@@ -578,6 +582,7 @@ layout3 = html.Div([
             style_cell = {"fontFamily": "Arial", "size": 10, 'textAlign': 'left'}
             ),
         html.Br(),
+        html.Br(),
         dcc.Markdown('''Tableau des résultats des algos avec tfid'''),
         dash_table.DataTable(
             id = 'Kaggle1',
@@ -645,3 +650,28 @@ layout3 = html.Div([
     dcc.Link('Go to page1', href='/apps/page1')
 ])            
 
+stopwords = nltk.corpus.stopwords.words('english')
+
+
+targets = list(df["Emotion"])
+corpus = list(df["Text"])
+
+X = corpus
+y = targets
+X_train, X_test, y_train, y_test = train_test_split(X, y,random_state=0)
+
+pipe = Pipeline([('vect', CountVectorizer(stop_words = stopwords)), ('sgd', SGDClassifier()),])
+pipe.fit(X_train, y_train)
+
+
+
+
+layout4 = html.Div(
+    [
+        html.I("Cette Page nous donne la prédiction des émotions sur le jeu de données Kaggle "),
+        html.Br(),
+        html.Br(),
+        html.Div(dcc.Input(id="input1", type="text", placeholder="Ecrivez votre text", debounce=True), className="mb-4 text-center"),
+        html.Div(html.H2(id="output"), className="mb-4 text-center"),
+    ]
+)
