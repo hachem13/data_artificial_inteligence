@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../static/style.css" />
+    <title>Recommendation des Artists</title>
 </head>
-<body>
+    </br>
     <h1>Artiste Favoris</h1>
-    <div>Veuillez selectionné un artists : </div>
+    <div>Veuillez selectionné un ou plusieurs artists : </div>
+    </br>
     <div class = "chart" id = "data"> 
        
-        <form action="/result" method="post">
+        <form action="/result" method="post" >
+            <div id = "groupe">
+            <select name = "artist" multiple >
+            
             {% for name in artists_name %}
-            <p>{{ name }} <input type="checkbox" name = "artist" value = {{ name }} id ='name'  /><br/> </p> 
+            <p>{{ name }} <option  name = "artist" value = {{ name }} id ='name'  ><br/> </p> 
             
             {% endfor %}
-        <p> <input type="submit" value="Envoyer" /> </p> <!-- submit button -->
+            </select> <p> <!-- picture --> <img src="/static/image/images.png" alt="chanteur" /></p>     
+            
+            </div>  <p> <input type="submit" value="Envoyer" /> </p> <!-- submit button -->
+
         
         </form>
+        
         
     </div>
 </body>
