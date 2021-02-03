@@ -22,7 +22,6 @@ def index():
 @app.route('/result', methods = ['GET', 'POST'])
 def result():
     request.method == 'POST'
-    #name = request.form.get('name')
     name = request.form.getlist('artist')
 
     items = recommendation(name)

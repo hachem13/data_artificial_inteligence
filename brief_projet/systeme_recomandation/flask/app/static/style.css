@@ -1,0 +1,29 @@
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: rgba(191, 210, 211, 0.297);
+}
+h1 {
+    color: rgba(49, 49, 187, 0.831);
+    margin-left: 40px;
+    text-align :center;
+    
+}
+select{
+    width: 70vw;
+    height: 51vh;
+    
+}
+
+#groupe{
+    display: flex;
+}
+#groupe img {
+    margin-left : 50px;
+    margin-bottom: 200px;
+}
+#liste{
+    text-align :center;
+}
+h3{
+    text-align: center;
+}

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 # Importer la bibliothèque Flask
 from flask import Flask
 from app import config
